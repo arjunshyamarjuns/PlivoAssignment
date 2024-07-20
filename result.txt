@@ -1,0 +1,14 @@
+Message UUID: 79c1eca3-cd81-47cd-a202-c4ee17474846
+From: 14155552671
+To: 916235982345
+Status: failed
+Error Code: 450
+Message Time: 2024-07-20 09:13:30.036295+05:30
+
+Message UUID: 1a3de8ba-97c4-4253-aa36-01cfef2962a5
+From: 14155552670
+To: 916235982345
+Status: failed
+Error Code: 450
+Message Time: 2024-07-20 09:13:30.418326+05:30
+
