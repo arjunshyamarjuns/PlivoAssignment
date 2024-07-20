@@ -8,7 +8,7 @@
        ```
        PLIVO_AUTH_ID=your_auth_id_here
        PLIVO_AUTH_TOKEN=your_auth_token_here
-      OPENWEATHER_API_KEY=your_openweather_api_key_here
+       OPENWEATHER_API_KEY=your_openweather_api_key_here
        ```
 
 ## Build and Run
