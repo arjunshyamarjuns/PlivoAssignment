@@ -4,28 +4,31 @@ import com.plivo.Scenario2.FetchLatLon;
 import com.plivo.Scenario2.FetchWeatherData;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class BaseClass {
+    protected static final Logger logger = LoggerFactory.getLogger(BaseClass.class);
     protected static Dotenv dotenv;
     protected static String AUTH_ID;
     protected static String AUTH_TOKEN;
-
-    @BeforeClass
-    public void setUp() {
+    public void setUpPlivoTest() {
         dotenv = Dotenv.load();
         AUTH_ID = dotenv.get("PLIVO_AUTH_ID");
         AUTH_TOKEN = dotenv.get("PLIVO_AUTH_TOKEN");
+        logger.info("BaseClass setup completed.");
+
     }
-    @BeforeClass
     public void setUpWeatherAutomationTest() {
         createCityCSV();
         FetchLatLon.main(new String[]{});
         FetchWeatherData.main(new String[]{});
+        logger.info("BaseClass setup completed.");
+
     }
     private void createCityCSV() {
         try {
@@ -38,11 +41,9 @@ public class BaseClass {
             if (!cityFile.exists()) {
                 try (FileWriter writer = new FileWriter(cityFile)) {
                     writer.append("City\n");
-                    writer.append("New York\n");
-                    writer.append("Los Angeles\n");
                     writer.append("Chicago\n");
                     writer.append("Houston\n");
-                    writer.append("Phoenix\n");
+                    writer.append("Bangalore\n");
                 }
             }
         } catch (IOException e) {
@@ -52,6 +53,11 @@ public class BaseClass {
 
     @AfterClass
     public void tearDown() {
-        // Add any necessary teardown operations
+        File customerMessage = new File("src/main/resources/customer_message.csv");
+        if (customerMessage.exists()) {
+            customerMessage.delete();
+        }
+        logger.info("BaseClass teardown completed.");
+
     }
 }

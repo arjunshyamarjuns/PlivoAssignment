@@ -3,7 +3,7 @@ package com.plivo.Scenario1;
 public class Message {
     public String src;
     public String dst;
-    String text;
+    public String text;
 
     public Message(String src, String dst, String text) {
         this.src = src;

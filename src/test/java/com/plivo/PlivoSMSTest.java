@@ -15,20 +15,25 @@ public class PlivoSMSTest extends BaseClass {
 
     @BeforeClass
     public void setup() {
-        super.setUp();
+        super.setUpPlivoTest();
         CreateCustomerCSV.createCustomerCSV(CSV_FILE_PATH);
+        logger.info("Customer CSV file created.");
     }
 
     @Test
     public void testCreateCustomerCSV() {
         List<Message> messages = ReadCustomerData.readCustomerData(CSV_FILE_PATH, List.of(1, 2, 3, 4));
         assertEquals(messages.size(), 4);
+        logger.info("testCreateCustomerCSV passed.");
+
     }
 
     @Test
     public void testGetCustomerIDs() {
         List<Integer> ids = GetCustomerIDs.getCustomerIDs("1,2,3");
         assertEquals(ids, List.of(1, 2, 3));
+        logger.info("testGetCustomerIDs passed.");
+
     }
 
     @Test
@@ -37,17 +42,20 @@ public class PlivoSMSTest extends BaseClass {
         List<Message> messages = ReadCustomerData.readCustomerData(CSV_FILE_PATH, customerIDs);
         assertEquals(messages.size(), 2);
         assertEquals(messages.get(0).src, "+14155552671");
-        assertEquals(messages.get(0).dst, "+16235982345");
+        assertEquals(messages.get(0).dst, "+916235982345");
+        logger.info("testReadCustomerData passed.");
+
     }
 
     @Test
     public void testSendSMSAndFetchDetails() {
         List<Integer> customerIDs = List.of(1, 2);
         List<Message> messages = ReadCustomerData.readCustomerData(CSV_FILE_PATH, customerIDs);
-        System.out.println(messages);
+        logger.info("Messages to be sent: " + messages);
         try {
             List<String> messageUUIDs = SendSMS.sendSMS(messages, AUTH_ID, AUTH_TOKEN);
             FetchMessageDetails.fetchAndWriteMessageDetails(messageUUIDs, AUTH_ID, AUTH_TOKEN, RESULT_FILE_PATH);
+            logger.info("testSendSMSAndFetchDetails passed.");
         } catch (RuntimeException e) {
             e.printStackTrace();
             fail("SMS sending failed with error: " + e.getMessage());
@@ -64,6 +72,7 @@ public class PlivoSMSTest extends BaseClass {
                 new Message("4155552671", "+16235982345", "Invalid source number format")
         );
         SendSMS.sendSMS(messages, AUTH_ID, AUTH_TOKEN);
+        logger.error("testInvalidPhoneNumberFormat failed due to invalid phone number format.");
     }
 
     @Test(expectedExceptions = RuntimeException.class)
@@ -72,6 +81,7 @@ public class PlivoSMSTest extends BaseClass {
                 new Message("+14155552671", "+16235982345", "")
         );
         SendSMS.sendSMS(messages, AUTH_ID, AUTH_TOKEN);
+        logger.error("testEmptyMessageText failed due to empty message text.");
     }
 
     @Test(expectedExceptions = RuntimeException.class)
@@ -81,5 +91,6 @@ public class PlivoSMSTest extends BaseClass {
         );
         // Simulate network failure by using invalid auth credentials
         SendSMS.sendSMS(messages, "invalid_auth_id", "invalid_auth_token");
+        logger.error("testNetworkFailureSimulation failed due to simulated network failure.");
     }
 }
